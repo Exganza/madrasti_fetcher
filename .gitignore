@@ -8,6 +8,9 @@ __pycache__/
 
 # Distribution / packaging
 .Python
+
+كشوف/
+driver/
 build/
 develop-eggs/
 dist/
