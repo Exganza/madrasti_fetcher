@@ -600,18 +600,40 @@ class Toplevel1:
                 ask = messagebox.askyesno("رسالة","هل تريد اضافة البيانات في كشف متابعة واجبات الطلاب ؟")
                 if ask == True:
                     list_hw_motaba = []
+                    list_hw_motaba_last = []
+                    df_absent = pd.read_csv(f'كشوف/شعبة {shoba_name} - حضور.csv')
                     df_hw = pd.read_csv(f'كشوف/شعبة {shoba_name} - واجبات.csv')
+                    
+                    main_names = df_absent["اسم الطالب"].tolist()
+                    
                     if len(df_hw) == 0:
-                        df_hw["اسم الطالب"] = list_name
+                        df_hw["اسم الطالب"] = main_names
+                        # df_hw["اسم الطالب"] = list_name
                         
                     
                     #fill hw list with " "
                     for i in range(len(list_name)):
                         list_hw_motaba.append(str(list_hw[i]) + " " + str(list_mark[i]))
                     
+                    dictionary = dict(zip(list_name, list_hw_motaba))
+                    
+                    for i in range(df_hw.shape[0]):
+                        name_foucs = df_hw.at[i,"اسم الطالب"]
+                        for x in list_name:
+                            match=len([matched for matched in x.split() if matched in name_foucs.split()]) 
+                            if match >=3:
+                                list_hw_motaba_last.append(dictionary[x])
+                                break
                             
-                    df_hw[f"{hw_title}"] = list_hw_motaba
+                            if x == list_name[-1]:
+                                list_hw_motaba_last.append("X")
+                            
+                    # df_hw[f"{hw_title}"] = list_hw_motaba
+                    df_hw[f"{hw_title}"] = list_hw_motaba_last
                     df_hw.to_csv(f"كشوف/شعبة {shoba_name} - واجبات.csv", encoding= "UTF-8-sig", index = False)
+                    
+                    
+                    
                 else:
                     pass
                 
@@ -690,16 +712,35 @@ class Toplevel1:
                 ask = messagebox.askyesno("رسالة","هل تريد اضافة البيانات في كشف متابعة انشطة الطلاب ؟")
                 if ask == True:
                     list_activity_motaba = []
+                    list_activity_motaba_last = []
+                    df_absent = pd.read_csv(f'كشوف/شعبة {shoba_name} - حضور.csv')
+
                     df_activity = pd.read_csv(f'كشوف/شعبة {shoba_name} - انشطة.csv')
+                    main_names = df_absent["اسم الطالب"].tolist()
+                    
                     if len(df_activity) == 0:
-                        df_activity["اسم الطالب"] = list_name
+                        # df_activity["اسم الطالب"] = list_name
+                        df_activity["اسم الطالب"] = main_names
                         
                     
                     #fill hw list with " "
                     for i in range(len(list_name)):
                         list_activity_motaba.append(str(list_hw[i]) + " " + str(list_mark[i]))
+                    
+                    dictionary = dict(zip(list_name, list_activity_motaba))
+                    
+                    for i in range(df_activity.shape[0]):
+                        name_foucs = df_activity.at[i,"اسم الطالب"]
+                        for x in list_name:
+                            match=len([matched for matched in x.split() if matched in name_foucs.split()]) 
+                            if match >=3:
+                                list_activity_motaba_last.append(dictionary[x])
+                                break
+                            
+                            if x == list_name[-1]:
+                                list_activity_motaba_last.append("X")
 
-                    df_activity[f"{hw_title}"] = list_activity_motaba
+                    df_activity[f"{hw_title}"] = list_activity_motaba_last
                     df_activity.to_csv(f"كشوف/شعبة {shoba_name} - انشطة.csv", encoding= "UTF-8-sig", index = False)
                 else:
                     pass
