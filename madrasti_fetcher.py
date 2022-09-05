@@ -19,6 +19,7 @@ import pandas as pd
 from datetime import timedelta
 from datetime import datetime
 # import tkinter as tk
+import tkinter as tk
 from tkinter import messagebox, DISABLED, NORMAL, simpledialog
 from tkinter.filedialog import askopenfilename
 import sys
@@ -39,17 +40,7 @@ if not os.path.exists(path):
     df.to_csv("driver/config.csv", encoding="utf-8-sig", index=False)
 
 
-try:
-    import Tkinter as tk
-except ImportError:
-    import tkinter as tk
 
-try:
-    import ttk
-    py3 = False
-except ImportError:
-    import tkinter.ttk as ttk
-    py3 = True
 
 import madrasti_fetcher_support
 
