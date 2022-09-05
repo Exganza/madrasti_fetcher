@@ -11,7 +11,8 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.chrome.options import Options
 import chromedriver_autoinstaller
-
+from selenium.webdriver.common.by import By
+# pyinstaller --noconfirm --onefile --windowed --icon "driver/icon-rules-book-96.ico" "madrasti_fetcher.py"
 
 import time
 import pandas as pd
@@ -139,16 +140,16 @@ class Toplevel1:
             driver.get("https://schools.madrasati.sa/")
             time.sleep(4)
             # Login
-            driver.find_element_by_xpath("//*[@id='Beneficiaries']/div/div[1]/div[2]/a/div/div").click()
-            driver.find_element_by_id("i0116").send_keys(username)
+            driver.find_element(By.XPATH,"//*[@id='Beneficiaries']/div/div[1]/div[2]/a/div/div").click()
+            driver.find_element(By.ID,"i0116").send_keys(username)
             time.sleep(1)
-            driver.find_element_by_id("idSIButton9").click()
+            driver.find_element(By.ID,"idSIButton9").click()
             time.sleep(1)
-            driver.find_element_by_id("i0118").send_keys(password)
+            driver.find_element(By.ID,"i0118").send_keys(password)
             time.sleep(1)
-            driver.find_element_by_id("idSIButton9").click()
+            driver.find_element(By.ID,"idSIButton9").click()
             time.sleep(1)
-            driver.find_element_by_id("idSIButton9").click()
+            driver.find_element(By.ID,"idSIButton9").click()
     
     
     def settings(self):
@@ -274,14 +275,14 @@ class Toplevel1:
                 break
             
             # get Class time
-            class_name_get = driver.find_element_by_xpath("//*[@class='col-md-5 text-primary text-right']/label[1]")
-            shoba_name_get = driver.find_element_by_xpath("//*[@class='col-md-5 text-primary text-right']/label[2]")
+            class_name_get = driver.find_element(By.XPATH,"//*[@class='col-md-5 text-primary text-right']/label[1]")
+            shoba_name_get = driver.find_element(By.XPATH,"//*[@class='col-md-5 text-primary text-right']/label[2]")
             class_name = class_name_get.get_attribute('innerHTML')
             shoba_name = shoba_name_get.get_attribute('innerHTML')
 
 
             
-            class_time_get = driver.find_element_by_xpath("//*[@class='time']")
+            class_time_get = driver.find_element(By.XPATH,"//*[@class='time']")
             class_time = class_time_get.get_attribute("outerHTML")
             class_time = class_time.split()
             if class_time[6] == "ص":
@@ -303,7 +304,7 @@ class Toplevel1:
             while page_incorrect:
                 try:
                     list_name = []
-                    for elem in driver.find_elements_by_xpath('.//*[@class="Maintdtitle"]'):
+                    for elem in driver.find_elements(By.XPATH,'.//*[@class="Maintdtitle"]'):
                         list_name.append(elem.text)
                     page_incorrect = False
                 except:
@@ -331,7 +332,7 @@ class Toplevel1:
         # _ = input("ALL EXIST _ PRESS")
 
         # for i in range(len(student_class)):
-        #     drop = Select(driver.find_element_by_xpath(f'.//*[@id="List_{i}__AttendStatusId"]'))
+        #     drop = Select(driver.find_element(By.XPATH,f'.//*[@id="List_{i}__AttendStatusId"]'))
         #     drop.select_by_index(0)
         # ## DELETE LATER   
         if copy_incorrect == True:
@@ -368,7 +369,7 @@ class Toplevel1:
 
                     if int(diff_time_min) > int(late_time):
                         # تسجيل حاضر متأخر
-                        drop = Select(driver.find_element_by_xpath(f'.//*[@id="List_{i}__AttendStatusId"]'))
+                        drop = Select(driver.find_element(By.XPATH,f'.//*[@id="List_{i}__AttendStatusId"]'))
                         drop.select_by_index(3)
                         # Lists for late students
                         late_list_studs.append(list_name[i])
@@ -376,12 +377,12 @@ class Toplevel1:
                         late_time_studs.append(diff_time_min)
                     else:
                         # تسجيل حاضر
-                        drop = Select(driver.find_element_by_xpath(f'.//*[@id="List_{i}__AttendStatusId"]'))
+                        drop = Select(driver.find_element(By.XPATH,f'.//*[@id="List_{i}__AttendStatusId"]'))
                         drop.select_by_index(0)
 
                 else:
                     # تسجيل غياب
-                    drop = Select(driver.find_element_by_xpath(f'.//*[@id="List_{i}__AttendStatusId"]'))
+                    drop = Select(driver.find_element(By.XPATH,f'.//*[@id="List_{i}__AttendStatusId"]'))
                     drop.select_by_index(2)
                     #lists for absents
                     absent_list_studs.append(list_name[i])
@@ -403,7 +404,7 @@ class Toplevel1:
             
             
             #Get date from PAGE
-            elem = driver.find_element_by_xpath('.//*[@id="lblDay"]')
+            elem = driver.find_element(By.XPATH,'.//*[@id="lblDay"]')
             pg_today = elem.get_attribute("innerHTML")
             
             date_infilename = pg_today.replace("/", "_")
@@ -440,7 +441,7 @@ class Toplevel1:
                     list_absent_motaba.append(" ")
                     
                 for i in range(len(list_name)):
-                    elem = driver.find_element_by_xpath(f'.//*[@id="List_{i}__AttendStatusId"]')
+                    elem = driver.find_element(By.XPATH,f'.//*[@id="List_{i}__AttendStatusId"]')
                     state = elem.get_attribute('value')
                     list_absent_motaba[i] = state
                 
@@ -457,7 +458,7 @@ class Toplevel1:
                         list_absent_motaba[i] = "ت بعذر"
                 
                 
-                # elem = driver.find_element_by_xpath('.//*[@id="lblDay"]')
+                # elem = driver.find_element(By.XPATH,'.//*[@id="lblDay"]')
                 # pg_today = elem.get_attribute("innerHTML")
                         
                 df_absent[f"{pg_today}"] = list_absent_motaba
@@ -476,7 +477,7 @@ class Toplevel1:
             while page_incorrect:
                 try:
                     list_name = []
-                    for elem in driver.find_elements_by_xpath('.//*[@class="Maintdtitle"]'):
+                    for elem in driver.find_elements(By.XPATH,'.//*[@class="Maintdtitle"]'):
                         list_name.append(elem.text)
                     page_incorrect = False
                 except:
@@ -495,11 +496,11 @@ class Toplevel1:
             #     list_absent_motaba.append(" ")
                 
             # for i in range(len(list_name)):
-            #     elem = driver.find_element_by_xpath(f'.//*[@id="List_{i}__AttendStatusId"]')
+            #     elem = driver.find_element(By.XPATH,f'.//*[@id="List_{i}__AttendStatusId"]')
             #     state = elem.get_attribute('value')
             #     list_absent_motaba[i] = state
                 
-            elms = driver.find_elements_by_class_name('form-control')
+            elms = driver.find_elements(By.CLASS_NAME, 'form-control')
             for l in elms:
                 state = l.get_attribute('value')
                 list_absent_motaba.append(state)
@@ -518,7 +519,7 @@ class Toplevel1:
                     list_absent_motaba[i] = "ت بعذر"
             
                 
-                elem = driver.find_element_by_xpath('.//*[@id="lblDay"]')
+                elem = driver.find_element(By.XPATH,'.//*[@id="lblDay"]')
                 pg_today = elem.get_attribute("innerHTML")
                         
                 df_absent[f"{pg_today}"] = list_absent_motaba
@@ -544,15 +545,15 @@ class Toplevel1:
                 time.sleep(1)
                 
                 #get home work title
-                elem = driver.find_element_by_xpath('.//*[@class="col-md-10"]')
+                elem = driver.find_element(By.XPATH,'.//*[@class="col-md-10"]')
                 hw_title = elem.get_attribute("innerHTML")
                 hw_title = hw_title.split()
                 hw_title = " ".join(hw_title)
                 
-                for elem in driver.find_elements_by_xpath('.//span[@class="Maintdtitle"]'):
+                for elem in driver.find_elements(By.XPATH,'.//span[@class="Maintdtitle"]'):
                     list_name.append(elem.text)
                             
-                for elem in driver.find_elements_by_xpath('.//span[@class="smalldata"]'):
+                for elem in driver.find_elements(By.XPATH,'.//span[@class="smalldata"]'):
                     list_hw.append(elem.text)
                     
                 for i in list_hw:
@@ -577,7 +578,7 @@ class Toplevel1:
                     
                 for i in range(len(list_name)):
                     if list_hw[i] == 'تم حل الواجب':
-                        elem = driver.find_element_by_xpath(f'.//*[@id="List_{i}__Grade"]')
+                        elem = driver.find_element(By.XPATH,f'.//*[@id="List_{i}__Grade"]')
                         mark = elem.get_attribute('value')
                         list_mark[i] = mark
 
@@ -661,15 +662,15 @@ class Toplevel1:
                 time.sleep(1)
                 
                 #get home work title
-                elem = driver.find_element_by_xpath('.//*[@class="col-md-10"]')
+                elem = driver.find_element(By.XPATH,'.//*[@class="col-md-10"]')
                 hw_title = elem.get_attribute("innerHTML")
                 hw_title = hw_title.split()
                 hw_title = " ".join(hw_title)
                 
-                for elem in driver.find_elements_by_xpath('.//span[@class="Maintdtitle"]'):
+                for elem in driver.find_elements(By.XPATH,'.//span[@class="Maintdtitle"]'):
                     list_name.append(elem.text)
                             
-                for elem in driver.find_elements_by_xpath('.//span[@class="smalldata"]'):
+                for elem in driver.find_elements(By.XPATH,'.//span[@class="smalldata"]'):
                     list_hw.append(elem.text)
                     
                 for i in list_hw:
@@ -688,7 +689,7 @@ class Toplevel1:
                     
                 for i in range(len(list_name)):
                     if list_hw[i] == 'تم حل النشاط':
-                        elem = driver.find_element_by_xpath(f'.//*[@id="List_{i}__Grade"]')
+                        elem = driver.find_element(By.XPATH,f'.//*[@id="List_{i}__Grade"]')
                         mark = elem.get_attribute('value')
                         list_mark[i] = mark
 
